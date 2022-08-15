@@ -8,6 +8,11 @@ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  height: 100%;
+}
+
+#__next {
+  height: 100%;
 }
 
 a {
@@ -27,4 +32,27 @@ a {
     color: white;
     background: black;
   }
+}
+
+.outer-grid {
+  grid-template-areas: "list list env env" "list list env env" "list list env env" "friends profile env env" "friends profile env env";
+  padding: 5rem;
+  gap: 5rem;
+  height: 100%;
+}
+
+.env {
+  grid-area: env;
+}
+
+.list {
+  grid-area: list;
+}
+
+.friends {
+  grid-area: friends;
+}
+
+.profile {
+  grid-area: profile;
 }
