@@ -1,7 +1,7 @@
 interface ChatsListProps {}
 
 const ChatsList: React.FC<ChatsListProps> = ({}) => {
-  return <div>ChatsList</div>;
+  return <div className="">ChatsList</div>;
 };
 
 export default ChatsList;

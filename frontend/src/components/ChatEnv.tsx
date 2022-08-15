@@ -1,7 +1,7 @@
 interface ChatEnvProps {}
 
 const ChatEnv: React.FC<ChatEnvProps> = ({}) => {
-  return <div>ChatEnv</div>;
+  return <div className="">ChatEnv</div>;
 };
 
 export default ChatEnv;
