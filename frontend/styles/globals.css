@@ -35,7 +35,7 @@ a {
 }
 
 .outer-grid {
-  grid-template-areas: "list list env env" "list list env env" "list list env env" "friends profile env env" "friends profile env env";
+  grid-template-areas: "list list env env" "list list env env" "list list env env" "list list env env" "friends profile env env";
   padding: 5rem;
   gap: 5rem;
   height: 100%;
