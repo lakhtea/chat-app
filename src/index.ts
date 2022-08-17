@@ -1,13 +1,14 @@
 import "reflect-metadata";
-import express from "express";
-import { MikroORM } from "@mikro-orm/core";
-import mikroOrmConfig from "./mikro-orm.config";
-import { ApolloServer } from "apollo-server-express";
 import cors from "cors";
 import session from "express-session";
+import express from "express";
+import mikroOrmConfig from "./mikro-orm.config";
+import { MikroORM } from "@mikro-orm/core";
+import { ApolloServer } from "apollo-server-express";
 import { buildSchema } from "type-graphql";
 import { UserResolver } from "./resolvers/user";
 import { MyContext } from "./types";
+import { Server } from "socket.io";
 
 const main = async () => {
   const orm = await MikroORM.init(mikroOrmConfig);
@@ -53,8 +54,21 @@ const main = async () => {
     cors: false,
   });
 
-  app.listen(3001, () => {
+  const server = app.listen(3001, () => {
     console.log("server started on localhost:3001");
+  });
+
+  const io = new Server(server, {
+    cors: {
+      origin: ["https://studio.apollographql.com", "http://localhost:3000"],
+    },
+  });
+  io.on("connection", (socket) => {
+    // receive a message from the client
+    socket.on("hello from client", (message) => {
+      // send a message to the client
+      io.emit("hello from server", message);
+    });
   });
 };
 
