@@ -1,19 +1,20 @@
 import axios, { AxiosPromise } from "axios";
-import { loginMutation, registerMutation } from "../mutations/userMutations";
-
-interface UserInput {
-  username: string;
-  password: string;
-}
-
-interface UserResponse {
-  user?: { username: string };
-  errors: [{}];
-}
+import {
+  loginMutation,
+  registerMutation,
+} from "../graphql/mutations/userMutations";
+import {
+  RegisterUserInput,
+  UserResponse,
+  LoginUserInput,
+} from "../ts/interfaces/session";
 
 const endpoint = "http://localhost:3001/graphql/";
+axios.defaults.withCredentials = true;
 
-export const register = (userData: UserInput): AxiosPromise<UserResponse> =>
+export const register = (
+  userData: RegisterUserInput
+): AxiosPromise<UserResponse> =>
   axios({
     url: endpoint,
     method: "POST",
@@ -26,7 +27,7 @@ export const register = (userData: UserInput): AxiosPromise<UserResponse> =>
     return response.data.data;
   });
 
-export const login = (userData: UserInput): AxiosPromise<UserResponse> =>
+export const login = (userData: LoginUserInput): AxiosPromise<UserResponse> =>
   axios({
     url: endpoint,
     method: "POST",

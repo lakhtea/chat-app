@@ -1,13 +1,11 @@
-import e from "cors";
 import { useState } from "react";
-import { useMutation } from "react-query";
-import { register } from "../apiUtil/userApi";
+import { login } from "../apiUtil/sessionApi";
 
-interface AuthFormProps {}
+interface LoginProps {}
 
-const AuthForm: React.FC<AuthFormProps> = ({}) => {
+const Login: React.FC<LoginProps> = ({}) => {
   const [authOptions, setAuthOptions] = useState({
-    username: "",
+    usernameOrEmail: "",
     password: "",
   });
 
@@ -15,13 +13,13 @@ const AuthForm: React.FC<AuthFormProps> = ({}) => {
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        register(authOptions);
+        login(authOptions);
       }}
     >
-      Username
+      Username or Email
       <input
         onChange={(e) =>
-          setAuthOptions({ ...authOptions, username: e.target.value })
+          setAuthOptions({ ...authOptions, usernameOrEmail: e.target.value })
         }
         type="text"
       />
@@ -37,4 +35,4 @@ const AuthForm: React.FC<AuthFormProps> = ({}) => {
   );
 };
 
-export default AuthForm;
+export default Login;
