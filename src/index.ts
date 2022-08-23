@@ -1,18 +1,18 @@
-import "reflect-metadata";
-import cors from "cors";
-import session from "express-session";
-import express from "express";
-import mikroOrmConfig from "./mikro-orm.config";
-import { MikroORM } from "@mikro-orm/core";
 import { ApolloServer } from "apollo-server-express";
-import { buildSchema } from "type-graphql";
-import { UserResolver } from "./resolvers/user";
-import { MyContext } from "./types";
+import cors from "cors";
+import express from "express";
+import session from "express-session";
+import "reflect-metadata";
 import { Server } from "socket.io";
+import { buildSchema } from "type-graphql";
+import { MessageResolver } from "./resolvers/message";
+import { UserResolver } from "./resolvers/user";
+import typeormConfig from "./typeormConfig";
+import { MyContext } from "./types";
 
 const main = async () => {
-  const orm = await MikroORM.init(mikroOrmConfig);
-  await orm.getMigrator().up();
+  const dataSource = typeormConfig;
+  await dataSource.initialize();
 
   const app = express();
 
@@ -41,10 +41,10 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, MessageResolver],
       validate: false,
     }),
-    context: ({ req, res }): MyContext => ({ em: orm.em, req, res }),
+    context: ({ req, res }): MyContext => ({ req, res }),
     csrfPrevention: true,
   });
 

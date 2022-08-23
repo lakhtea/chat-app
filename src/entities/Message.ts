@@ -1,26 +1,38 @@
-import { Entity, PrimaryKey, Property, ManyToOne } from "@mikro-orm/core";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+  BaseEntity,
+} from "typeorm";
 import { Field, ObjectType } from "type-graphql";
 import { User } from "./User";
 
 @ObjectType()
 @Entity()
-export class Message {
+export class Message extends BaseEntity {
   @Field()
-  @PrimaryKey()
+  @PrimaryGeneratedColumn()
   id!: number;
 
   @Field(() => String)
-  @Property({ type: "date" })
-  createdAt? = new Date();
-
-  @Field(() => String)
-  @Property({ type: "date", onUpdate: () => new Date() })
-  updatedAt? = new Date();
-
-  @Field()
-  @Property({ type: "text" })
+  @Column()
   body!: string;
 
-  @ManyToOne(() => User)
+  @Field()
+  @Column()
+  authorId!: number;
+
+  @ManyToOne(() => User, (user) => user.messages)
   author!: User;
+
+  @Field(() => String)
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Field(() => String)
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

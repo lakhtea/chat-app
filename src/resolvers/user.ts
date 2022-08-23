@@ -13,9 +13,12 @@ import {
 import argon2 from "argon2";
 
 @InputType()
-class UsernamePasswordInput {
+class RegisterUserInput {
   @Field()
   username: string;
+
+  @Field()
+  email: string;
 
   @Field()
   password: string;
@@ -42,19 +45,19 @@ class UserResponse {
 @Resolver()
 export class UserResolver {
   @Query(() => User, { nullable: true })
-  async me(@Ctx() { em, req }: MyContext) {
+  async me(@Ctx() { req }: MyContext) {
     if (!req.session.userId) {
       return null;
     }
 
-    const user = await em.findOne(User, { id: req.session.userId });
+    const user = await User.findOneBy({ id: req.session.userId });
     return user;
   }
 
   @Mutation(() => UserResponse)
   async register(
-    @Arg("options") options: UsernamePasswordInput,
-    @Ctx() { em, req }: MyContext
+    @Arg("options") options: RegisterUserInput,
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
     if (options.username.length <= 2) {
       return {
@@ -64,6 +67,12 @@ export class UserResolver {
             message: "length must be greater than 2",
           },
         ],
+      };
+    }
+
+    if (!options.email.includes("@")) {
+      return {
+        errors: [{ field: "email", message: "invalid email" }],
       };
     }
 
@@ -79,13 +88,14 @@ export class UserResolver {
     }
 
     const hashedPassword = await argon2.hash(options.password);
-    const user = em.create(User, {
-      username: options.username,
-      password: hashedPassword,
-    });
+    let user;
 
     try {
-      await em.persistAndFlush(user);
+      user = await User.create({
+        username: options.username,
+        email: options.email,
+        password: hashedPassword,
+      }).save();
     } catch (err) {
       if (err.code === "23505") {
         return {
@@ -95,17 +105,17 @@ export class UserResolver {
     }
 
     //set cookie
-    req.session!.userId = user.id;
+    if (user) req.session!.userId = user.id;
 
     return { user };
   }
 
   @Mutation(() => UserResponse)
   async login(
-    @Arg("options") options: UsernamePasswordInput,
-    @Ctx() { em, req }: MyContext
+    @Arg("options") options: RegisterUserInput,
+    @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const user = await em.findOne(User, { username: options.username });
+    const user = await User.findOneBy({ username: options.username });
     if (!user) {
       return {
         errors: [{ field: "username", message: "that username doesn't exist" }],
