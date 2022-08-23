@@ -24,6 +24,15 @@ class RegisterUserInput {
   password: string;
 }
 
+@InputType()
+class LoginInput {
+  @Field()
+  usernameOrEmail: string;
+
+  @Field()
+  password: string;
+}
+
 @ObjectType()
 class FieldError {
   @Field()
@@ -52,6 +61,12 @@ export class UserResolver {
 
     const user = await User.findOneBy({ id: req.session.userId });
     return user;
+  }
+
+  @Query(() => [User], { nullable: true })
+  async users() {
+    const users = await User.find({});
+    return users;
   }
 
   @Mutation(() => UserResponse)
@@ -112,10 +127,14 @@ export class UserResolver {
 
   @Mutation(() => UserResponse)
   async login(
-    @Arg("options") options: RegisterUserInput,
+    @Arg("options") options: LoginInput,
     @Ctx() { req }: MyContext
   ): Promise<UserResponse> {
-    const user = await User.findOneBy({ username: options.username });
+    const user = await User.findOneBy(
+      options.usernameOrEmail.includes("@")
+        ? { email: options.usernameOrEmail }
+        : { username: options.usernameOrEmail }
+    );
     if (!user) {
       return {
         errors: [{ field: "username", message: "that username doesn't exist" }],
