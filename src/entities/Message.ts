@@ -25,7 +25,7 @@ export class Message extends BaseEntity {
   @Column()
   authorId!: number;
 
-  @ManyToOne(() => User, (user) => user.messages)
+  @ManyToOne(() => User, (user) => user.messages, { onDelete: "CASCADE" })
   author!: User;
 
   @Field(() => String)

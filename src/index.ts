@@ -29,8 +29,8 @@ const main = async () => {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
         httpOnly: true,
-        sameSite: "lax", //csrf
-        secure: "auto", //cookie only works in https,
+        sameSite: "none", //csrf
+        secure: true, //cookie only works in https,
       },
       saveUninitialized: false,
       secret: "peepeepoopoo",
@@ -51,6 +51,7 @@ const main = async () => {
   await apolloServer.start();
   apolloServer.applyMiddleware({
     app,
+    cors: false,
   });
 
   const server = app.listen(3001, () => {
