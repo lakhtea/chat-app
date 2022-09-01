@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { login } from "../apiUtil/sessionApi";
+import { login } from "../api/sessionApi";
+import Form from "../styledElements/Form";
+import Input from "../styledElements/Input";
 
 interface LoginProps {}
 
@@ -10,28 +12,30 @@ const Login: React.FC<LoginProps> = ({}) => {
   });
 
   return (
-    <form
+    <Form
       onSubmit={(e) => {
         e.preventDefault();
         login(authOptions);
       }}
     >
-      Username or Email
-      <input
+      <Input
         onChange={(e) =>
           setAuthOptions({ ...authOptions, usernameOrEmail: e.target.value })
         }
         type="text"
+        name="usernameOrEmail"
+        label="Username or Email"
       />
-      Password
-      <input
+      <Input
         onChange={(e) =>
           setAuthOptions({ ...authOptions, password: e.target.value })
         }
         type="password"
+        name="password"
+        label="Password"
       />
       <button type="submit">Submit</button>
-    </form>
+    </Form>
   );
 };
 

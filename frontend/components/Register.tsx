@@ -1,5 +1,7 @@
 import { useState } from "react";
-import { register } from "../apiUtil/sessionApi";
+import { register } from "../api/sessionApi";
+import Form from "../styledElements/Form";
+import Input from "../styledElements/Input";
 
 interface RegisterProps {}
 
@@ -11,35 +13,35 @@ const Register: React.FC<RegisterProps> = ({}) => {
   });
 
   return (
-    <form
+    <Form
       onSubmit={(e) => {
         e.preventDefault();
         register(authOptions);
       }}
     >
-      Username
-      <input
+      <Input
         onChange={(e) =>
           setAuthOptions({ ...authOptions, username: e.target.value })
         }
         type="text"
+        label="Username"
       />
-      Email
-      <input
+      <Input
         onChange={(e) =>
           setAuthOptions({ ...authOptions, email: e.target.value })
         }
         type="text"
+        label="Email"
       />
-      Password
-      <input
+      <Input
         onChange={(e) =>
           setAuthOptions({ ...authOptions, password: e.target.value })
         }
         type="password"
+        label="Password"
       />
       <button type="submit">Submit</button>
-    </form>
+    </Form>
   );
 };
 

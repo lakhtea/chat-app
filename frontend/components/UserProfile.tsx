@@ -2,7 +2,7 @@ interface UserProfileProps {}
 
 const UserProfile: React.FC<UserProfileProps> = ({}) => {
   return (
-    <div className="profile border-white border-2 p-4">
+    <div className="profile">
       <div>Lakhte Agha</div>
       <div>5 messages sent</div>
       <div>5 messages received</div>

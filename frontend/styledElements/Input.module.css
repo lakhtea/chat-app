@@ -1,0 +1,43 @@
+.container {
+  position: relative;
+  border: 1px solid red;
+}
+
+.input {
+  padding: 1em;
+  width: 100%;
+  outline: none;
+  border: none;
+  background-color: inherit;
+}
+
+.label {
+  position: absolute;
+  left: 1em;
+  top: 50%;
+  transform: translateY(-50%);
+  transition: 0.2s ease;
+  pointer-events: none;
+  color: lightgray;
+  background-color: black;
+}
+
+.input:focus + .label,
+.input:not(:placeholder-shown) + .label {
+  top: 0%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.75em;
+}
+
+.iconContainer {
+  cursor: pointer;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3em;
+}

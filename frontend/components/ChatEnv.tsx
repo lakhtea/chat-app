@@ -2,22 +2,11 @@
 import { io } from "socket.io-client";
 import { useEffect, useRef, useState } from "react";
 
-const styles = {
-  container: "p-6 border-white border-8 relative",
-  header: "absolute top-0 z-10",
-  dateStamp: "sticky",
-  receiverMessage: "",
-  senderMessage: "",
-};
-
 interface ChatEnvProps {}
 
 const socket = io("ws://localhost:3001");
 
 const ChatEnv: React.FC<ChatEnvProps> = ({}) => {
-  const { container, header, dateStamp, receiverMessage, senderMessage } =
-    styles;
-
   const [messageList, setMessageList] = useState(["one", "two"]);
   const [text, setText] = useState("");
   const isSecondRender = useRef(false);
@@ -39,26 +28,20 @@ const ChatEnv: React.FC<ChatEnvProps> = ({}) => {
   };
 
   return (
-    <div className={`env ${container}`}>
+    <div className="env">
       {/* <div className={header}>Chat Bot</div>
       <div className={dateStamp}>Today</div>
       <div className={receiverMessage}>Hi! My name is Chat Bot! </div>
       <div className={senderMessage}>Hi! My name is Lakhte</div> */}
 
-      <div className="border-white border-2">
+      <div>
         {messageList.map((message, key) => (
           <div key={key}>{message}</div>
         ))}
       </div>
 
-      <input
-        type="text"
-        className="border-white border-2"
-        onChange={(e) => setText(e.target.value)}
-      />
-      <button className="border-white border-2" onClick={handleClick}>
-        Click
-      </button>
+      <input type="text" onChange={(e) => setText(e.target.value)} />
+      <button onClick={handleClick}>Click</button>
     </div>
   );
 };
